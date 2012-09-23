@@ -6,6 +6,36 @@
  * Authors: Stanislav Demyanovich, <a href="mailto:stan@angrybubo.com">stan@angrybubo.com</a>
  * Date: September 23 2012
  *
+ * Example: 
+---
+import ab.signal;
+import std.stdio;
+
+	class Observable {
+
+		mixin Signal signal;
+	}
+
+	class Observer {
+
+		public void slot() {
+
+			writeln( "Observable signaled." );
+		}
+	}
+
+	...
+
+	auto observable = new Observable;
+	auto observer = new Observer;
+
+	observable.signal.connect( &observer.slot );
+
+	...
+
+	observable.signal.emit(); //Will print "Observable signaled."
+
+---
  * Exmaple:
 ---
 import ab.signal;
