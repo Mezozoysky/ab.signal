@@ -6,14 +6,15 @@
  * Authors: Stanislav Demyanovich, <a href="mailto:stan@angrybubo.com">stan@angrybubo.com</a>
  * Date: September 23 2012
  *
- * Example: 
+ *
+ * Examples:
 ---
 import ab.signal;
 import std.stdio;
 
 	class Observable {
 
-		mixin Signal signal;
+		mixin Signal;
 	}
 
 	class Observer {
@@ -29,14 +30,17 @@ import std.stdio;
 	auto observable = new Observable;
 	auto observer = new Observer;
 
-	observable.signal.connect( &observer.slot );
+	observable.connect( &observer.slot );
 
 	...
 
-	observable.signal.emit(); //Will print "Observable signaled."
+	observable.emit(); //Will print "Observable signaled."
 
 ---
- * Exmaple:
+ *
+ *
+ * You can have as many signals in the scope as You need by naming.
+ * Signals may have arguments (note that connected slots must have exactly the same parameter list).
 ---
 import ab.signal;
 import std.stdio;
@@ -45,6 +49,7 @@ class Observable {
 
 	private int _number;
 
+	mixin Signal occasion;
 	mixin Signal!( int ) numberChanged;
 
 	public void setNumber( int number ) {
@@ -55,9 +60,14 @@ class Observable {
 }
 
 class Observer {
-	
-	public void perform( int number ) {
-	
+
+	public void onOccasion() {
+
+		writeln( "Something happens!");
+	}
+
+	public void onNumberChanged( int number ) {
+
 		writefln( "Observable's number is changed to %s", number );
 	}
 }
@@ -67,13 +77,54 @@ class Observer {
 auto observable = new Observable;
 auto observer = new Observer;
 
-observable.numberChanged.connect( &observer.perform );
+observable.occasion.connect( &observer.onOccasion );
+observable.numberChanged.connect( &observer.onNumberChanged );
 
+observable.occasion.emit(); //will print "Something happens!"
 observable.setNumber( 8 ); //will print "Observable's number is changed to 8"
 
-observable.numberChanged.disconnect( &observer.perform );
+observable.numberChanged.disconnect( &observer.onNumberChanged );
 
+observable.occasion.emit(); //will print "Something happens!"
 observable.setNumber( 0 ); //will print nothing.
+---
+ *
+ *
+ * Any signal may have as many connected slots as needed.
+---
+import ab.signal;
+import std.stdio;
+
+class Officer {
+
+	private string _name;
+
+	public this( string name ) {
+
+		_name = name;
+	}
+
+	mixin Signal!( string ) command;
+
+	public void perform( string cmd) {
+
+		writefln( "%s was ordered to: \"%s\"\nPerforming.", _name, cmd);
+	}
+}
+
+
+auto captain = new Officer( "J. T. Kirk" );
+auto commander = new Officer( "Spock" );
+auto ltCommander = new Officer( "Scott" );
+auto lieutenant = new Officer( "Sulu" );
+auto ensign = new Officer( "Chekov" );
+
+captain.command.connect( &commander.perform );
+captain.command.connect( &ltCommander.perform );
+captain.command.connect( &lieutenant.perform );
+captain.command.connect( &ensign.perform );
+
+captain.command.emit( "Attack!! Kill'em all!" );
 ---
  */
 module ab.signal;
