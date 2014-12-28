@@ -1,0 +1,9 @@
+{
+	"name": "test_app",
+	"description": "ab.signal test application.",
+	"copyright": "Copyright © 2014, Stanislav Demyanovich",
+	"authors": ["Stanislav Demyanovich"],
+	"dependencies": {
+		"ab.signal": { "path": "../" },
+	},
+}

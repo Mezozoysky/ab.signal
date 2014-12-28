@@ -1,0 +1,18 @@
+{
+	"name": "ab.signal",
+	"targetType": "library",
+	"targetName": "absignal",
+	"description": "Plain and straightforward implementation of the Observer Design Pattern using Signals and Slots.",
+	"copyright": "Copyright © 2012-2014, Stanislav Demyanovich",
+	"authors": ["Stanislav Demyanovich"],
+	"homepage": "https://github.com/Mezozoysky/ab.signal",
+	"license": "MIT",
+	"dependencies": {
+	},
+	"importPaths": [
+		"src",
+	],
+	"sourcePaths": [
+		"src",
+	],
+}
